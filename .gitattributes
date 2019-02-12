@@ -1,0 +1,6 @@
+Assets/TextMesh Pro/* linguist-vendored
+*.asset linguist-vendored
+*.meta linguist-vendored
+*.prefab linguist-vendored
+*.mat linguist-vendored
+*.shader linguist-vendored
