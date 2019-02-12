@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class BallMovement : MonoBehaviour {
 
-
-	Transform trans;
+    Transform trans;
     Camera cam;
 
     public float movementSpeed = 5f;
 
-	public Vector3 direction;
+    public Vector3 direction;
 
     Rigidbody2D rb;
 
@@ -47,7 +46,9 @@ public class BallMovement : MonoBehaviour {
         halfWidth = halfHeight * ((float)Screen.width / (float)Screen.height); // half of world width (from center to left of screen)
     }
 
-    // instead of bouncing, balls go off the screen on easy mode, this is logic to destroy balls off the screen
+    /// <summary>
+    /// Destroy balls off the screen in Easy mode, teleports balls to the other side of the screen in Teleport mode.
+    /// </summary> 
     void FixedUpdate()
     {
         if (Game.isMode(GameMode.Easy)) {
