@@ -1,0 +1,7 @@
+*.asset linguist-vendored
+*.meta linguist-vendored
+*.prefab linguist-vendored
+*.mat linguist-vendored
+*.shader linguist-vendored
+*.cginc linguist-vendored
+
