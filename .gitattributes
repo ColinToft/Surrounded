@@ -3,3 +3,4 @@
 *.prefab linguist-vendored
 *.mat linguist-vendored
 *.shader linguist-vendored
+*.cginc linguist-vendored
