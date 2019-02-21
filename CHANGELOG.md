@@ -1,4 +1,4 @@
-## 0.6
+## 0.6.0 - 2019-02-20
 ### Added
 - Two-hit mode (balls take two-hits to be destroyed instead of one)
 - Teleport mode (instead of bouncing, balls move off one side of the screen and reappear on the opposite side)
@@ -45,7 +45,7 @@
 - Improved positioning of text in menu
 - Centered text in options menu
 
-## 0.2 - 2018-07-17
+## 0.2.0 - 2018-07-17
 ### Added
 - A main menu (Play, Options, Credits, Save & Quit)
 - Game over screen
