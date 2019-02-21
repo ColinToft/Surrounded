@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This script adds side colliders for the balls to bounce off of during gameplay.
+/// Based on Invertex's code found at: https://forum.unity.com/threads/collision-with-sides-of-screen.228865/
+/// </summary>
 public class SideColliders : MonoBehaviour {
 
     public float colThickness = 4f;
@@ -9,21 +13,44 @@ public class SideColliders : MonoBehaviour {
 
     Vector2 screenSize;
 
+    Dictionary<string, Transform> colliders;
+
+
+    Vector3 prevBottomLeft, prevTopRight;
+
     void Start() {
 
-        if (Game.isMode(GameMode.Easy) || Game.isMode(GameMode.Teleport)) return; // No colliders on easy or teleport mode, the balls are supposed to go off the screen.
+        if (Game.IsMode(GameMode.Easy) || Game.IsMode(GameMode.Teleport)) return; // No colliders on easy or teleport mode, the balls are supposed to go off the screen.
 
-        //Create a Dictionary to contain all colliders
-        Dictionary<string, Transform> colliders = new Dictionary<string, Transform>();
+        //Create a Dictionary to contain all colliders and their transform components
+        colliders = new Dictionary<string, Transform>
+        {
+            { "Top", new GameObject().transform },
+            { "Bottom", new GameObject().transform },
+            { "Right", new GameObject().transform },
+            { "Left", new GameObject().transform }
+        };
 
-        //Create colliders and add their Transform components to the Dictionary
-        colliders.Add("Top", new GameObject().transform);
-        colliders.Add("Bottom", new GameObject().transform);
-        colliders.Add("Right", new GameObject().transform);
-        colliders.Add("Left", new GameObject().transform);
+        Update();
+    }
+
+    void Update()
+    {
+        if (Game.IsMode(GameMode.Easy) || Game.IsMode(GameMode.Teleport)) return; // No colliders on easy or teleport mode, the balls are supposed to go off the screen.
+
+        // Check for screen resizing
+        Vector3 bottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0));
+        Vector3 topRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
+
+        if (bottomLeft != prevBottomLeft || topRight != prevTopRight) UpdatePosition();
+
+    }
+
+    void UpdatePosition()
+    {
+        Vector3 cameraPos = Camera.main.transform.position;
 
         //Generate world space point information for position and scale calculations
-        Vector3 cameraPos = Camera.main.transform.position;
         screenSize.x = Vector2.Distance(Camera.main.ScreenToWorldPoint(new Vector2(0, 0)), Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0))) * 0.5f; //Grab the world-space position values of the start and end positions of the screen, then calculate the distance between them and store it as half, since we only need half that value for distance away from the camera to the edge
         screenSize.y = Vector2.Distance(Camera.main.ScreenToWorldPoint(new Vector2(0, 0)), Camera.main.ScreenToWorldPoint(new Vector2(0, Screen.height))) * 0.5f;
 
@@ -45,5 +72,8 @@ public class SideColliders : MonoBehaviour {
         colliders["Left"].position = new Vector3(cameraPos.x - screenSize.x - (colliders["Left"].localScale.x * 0.5f), cameraPos.y, zPosition);
         colliders["Top"].position = new Vector3(cameraPos.x, cameraPos.y + screenSize.y + (colliders["Top"].localScale.y * 0.5f), zPosition);
         colliders["Bottom"].position = new Vector3(cameraPos.x, cameraPos.y - screenSize.y - (colliders["Bottom"].localScale.y * 0.5f), zPosition);
+
+        prevBottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0));
+        prevTopRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
     }
 }

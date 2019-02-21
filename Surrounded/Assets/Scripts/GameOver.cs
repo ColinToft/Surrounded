@@ -17,7 +17,7 @@ public class GameOver : MonoBehaviour {
         if (Game.Instance.newHighScore) highscoreText.SetText("NEW HIGHSCORE!");
         else {
             highscoreText.SetText("HIGHSCORE: " + Game.GetHighScore().ToString("0"));
-            highscoreText.fontSize = 50;
+            highscoreText.fontSize = 65;
         }
         
         // Load the audio

@@ -14,25 +14,29 @@ public class OptionsMenu : MonoBehaviour {
 
 	public TMP_Dropdown graphicsQualityDropdown;
 
+    public Toggle fullscreenToggle;
+
 	public void ChangeVolume(float volume) {
-        Game.Instance.musicVolume = volume;
-        Camera.main.GetComponent<MusicVolume>().Start();
+        Game.SetMusicVolume(volume);
+        SaveLoad.Save();
     }
 
     public void SetQuality(int qualityIndex) {
-        QualitySettings.SetQualityLevel(qualityIndex);
+        Game.SetQuality(qualityIndex);
+        SaveLoad.Save();
     }
 
     public void SetFullscreen(bool isFullscreen) {
-        Screen.fullScreen = isFullscreen;
+        Game.SetFullScreen(isFullscreen);
+        SaveLoad.Save();
     }
 
     public void SetResolution(int resolutionIndex) {
-        Resolution resolution = resolutions[resolutionIndex];
-        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+        Game.SetResolution(resolutionIndex);
+        SaveLoad.Save();
     }
 
-    void Start() {
+    void Awake() {
         volumeSlider.value = Game.Instance.musicVolume;
 
         resolutions = Screen.resolutions;
@@ -41,18 +45,23 @@ public class OptionsMenu : MonoBehaviour {
 
         int currentResolutionIndex = 0;
 
-        foreach (Resolution r in resolutions) {
+        foreach (Resolution r in resolutions)
+        {
             if (r.height == Screen.currentResolution.height && r.width == Screen.currentResolution.width) currentResolutionIndex = options.Count;
             options.Add(r.width + " x " + r.height);
-
         }
 
         resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = currentResolutionIndex;
+        resolutionDropdown.value = Game.Instance.resolution;
         resolutionDropdown.RefreshShownValue();
 
-        graphicsQualityDropdown.value = QualitySettings.GetQualityLevel();
+        graphicsQualityDropdown.value = Game.Instance.quality;
         graphicsQualityDropdown.RefreshShownValue();
+
+        fullscreenToggle.isOn = Game.Instance.fullScreen;
+    }
+
+    void Start() {
 
     }
 

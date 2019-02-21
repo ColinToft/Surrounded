@@ -22,6 +22,12 @@ public sealed class Game {
 
     public float musicVolume;
 
+    public int quality;
+
+    public int resolution;
+
+    public bool fullScreen;
+
     [System.NonSerialized]
     public float score;
 
@@ -36,8 +42,8 @@ public sealed class Game {
 
     private static Game InitializeGame()
     {
-        if (SaveLoad.Load()) return SaveLoad.savedGame;
-        else return new Game();
+        Game inst = SaveLoad.Load() ? SaveLoad.savedGame : new Game();
+        return inst;
     }
 
     public static float GetHighScore()
@@ -50,33 +56,49 @@ public sealed class Game {
         return Instance.highscores[(int)mode];
     }
 
-    public static bool isMode(GameMode mode)
+    public static bool IsMode(GameMode mode)
     {
         return Instance.gameMode == mode;
     }
 
-    public static void setGameMode(GameMode mode)
+    public static void SetGameMode(GameMode mode)
     {
         Instance.gameMode = mode;
     }
 
-    public static bool isPaused()
+    public static bool IsPaused()
     {
         return Instance._paused;
     }
 
-    public static void setPaused(bool value)
+    public static void SetPaused(bool value)
     {
         Instance._paused = value;
     }
 
-    public static void Reset()
+    public static void SetMusicVolume(float volume)
     {
-        Game b = new Game(); // create a game to copy the base game settings from
-        Instance.highscores = b.highscores;
-        Instance.musicVolume = b.musicVolume;
-        Instance.newHighScore = false;
-        Instance._paused = false;
+        Instance.musicVolume = volume;
+        Camera.main.GetComponent<MusicVolume>().Start();
+    }
+
+    public static void SetQuality(int qualityIndex)
+    {
+        Instance.quality = qualityIndex;
+        QualitySettings.SetQualityLevel(qualityIndex, true);
+    }
+
+    public static void SetResolution(int resolutionIndex)
+    {
+        Instance.resolution = resolutionIndex;
+        Resolution r = Screen.resolutions[resolutionIndex];
+        Screen.SetResolution(r.width, r.height, Screen.fullScreen);
+    }
+
+    public static void SetFullScreen(bool isFullScreen)
+    {
+        Instance.fullScreen = isFullScreen;
+        Screen.fullScreen = isFullScreen;
     }
 
     public static void LoadMainMenu()
@@ -104,15 +126,50 @@ public sealed class Game {
     {
         return SceneManager.GetActiveScene().name;
     }
-    
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:Game"/> class, with all highscores at 0 and default settings.
+    /// </summary>
     private Game()
     {
         highscores = new float[System.Enum.GetNames(typeof(GameMode)).Length];
         musicVolume = 0.7f;
+
+        for (int i = 0; i < Screen.resolutions.Length; i++)
+        {
+            if (Screen.resolutions[i].height == Screen.currentResolution.height && Screen.resolutions[i].width == Screen.currentResolution.width) resolution = i;
+        }
+
+        SetQuality(QualitySettings.GetQualityLevel());
+        SetResolution(resolution);
+        SetFullScreen(Screen.fullScreen);
+
         newHighScore = false;
         _paused = false;
     }
 
+    /// <summary>
+    /// Resets the instance of the <see cref="T:Game"/> class, sets all highscores at 0 and returns settings to default.
+    /// </summary>
+    public static void Reset()
+    {
+        Game b = new Game(); // create a game to copy the base game settings from
+        Instance.highscores = b.highscores;
+        Instance.musicVolume = b.musicVolume;
+        Instance.newHighScore = b.newHighScore;
+        Instance._paused = b._paused;
+
+        Game.SetQuality(b.quality);
+        Game.SetResolution(b.resolution);
+        Game.SetFullScreen(b.fullScreen);
+    }
+
+    public static void Start()
+    {
+        Game.SetQuality(Instance.quality);
+        Game.SetResolution(Instance.resolution);
+        Game.SetFullScreen(Instance.fullScreen);
+    }
 
     /// <summary>Set the most recent score of the game.
     /// <returns>Returns <see langword="true"/> if score is bigger than the previous highscore, otherwise <see langword="false"/>. </returns>

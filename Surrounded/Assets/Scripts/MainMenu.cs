@@ -1,19 +1,18 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour {
+public class MainMenu : MonoBehaviour { 
 
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            SaveAndQuit();
-        }
+    void Awake()
+    {
+        Game.Start();
     }
 
     public void PlayClassic() {
         Game.LoadGame();
-        Game.setGameMode(GameMode.Classic);
+        Game.SetGameMode(GameMode.Classic);
     }
 
     public void SaveAndQuit() {

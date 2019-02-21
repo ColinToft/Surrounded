@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,7 +36,7 @@ public class BallMovement : MonoBehaviour {
         cam = Camera.main;
         rb = GetComponent<Rigidbody2D>();
         rb.AddForce(direction * movementSpeed * 50f); // For some reason 50 is the number to make the magnitude same as movement speed
-        if (Game.isMode(GameMode.Cluster) && gameObject.CompareTag("Ball")) {
+        if (Game.IsMode(GameMode.Cluster) && gameObject.CompareTag("Ball")) {
             cluster = new List<GameObject>();
             clustered = false;
         }
@@ -51,9 +51,9 @@ public class BallMovement : MonoBehaviour {
     /// </summary> 
     void FixedUpdate()
     {
-        if (Game.isMode(GameMode.Easy)) {
+        if (Game.IsMode(GameMode.Easy)) {
             if (trans.position.x < -halfWidth - ballRadius || trans.position.x > halfWidth + ballRadius || trans.position.y < -halfHeight - ballRadius || trans.position.y > halfHeight + ballRadius) Damage();
-        } else if (Game.isMode(GameMode.Teleport)) {
+        } else if (Game.IsMode(GameMode.Teleport)) {
             if ((trans.position.x < -halfWidth - ballRadius || trans.position.x > halfWidth + ballRadius)) {
                 if (!_offScreen) {
                     trans.position = new Vector3(-trans.position.x, trans.position.y, trans.position.z);
@@ -75,7 +75,7 @@ public class BallMovement : MonoBehaviour {
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         if (gameObject.CompareTag("Ball")) {
             if (coll.gameObject.CompareTag("Ball")) { // This is a all colliding with Ball
-                if (Game.isMode(GameMode.Cluster)) {
+                if (Game.IsMode(GameMode.Cluster)) {
                     if (!clustered) {
                         rb.velocity = new Vector2(0f, 0f);
                         rb.isKinematic = true; // stop this ball in the cluster
@@ -85,9 +85,9 @@ public class BallMovement : MonoBehaviour {
                         cluster.Add(coll.gameObject); // add the collided ball to the list of balls in this cluster
                         foreach (GameObject ball in cluster.ToArray()) ball.gameObject.GetComponent<BallMovement>().AddToCluster(gameObject); // add this ball to the other balls' list of balls in the cluster (use ToArray to make a copy of the list, so it doesn't change when balls are destroyed)
                     }
-                } else if (!Game.isMode(GameMode.Hard)) Damage();
+                } else if (!Game.IsMode(GameMode.Hard)) Damage();
             } else if (coll.gameObject.CompareTag("Mouse Ball")) { // This is a ball colliding with a Mouse Ball
-                if (Game.isMode(GameMode.Cluster)) foreach (GameObject ball in cluster.ToArray()) if (ball != gameObject) ball.GetComponent<BallMovement>().Damage(); // Destroy all other balls in the cluster (use ToArray to make a copy of the list, so it doesn't change when balls are destroyed)
+                if (Game.IsMode(GameMode.Cluster)) foreach (GameObject ball in cluster.ToArray()) if (ball != gameObject) ball.GetComponent<BallMovement>().Damage(); // Destroy all other balls in the cluster (use ToArray to make a copy of the list, so it doesn't change when balls are destroyed)
                 Damage();
             }
         }

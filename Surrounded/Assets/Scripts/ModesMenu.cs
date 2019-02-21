@@ -6,31 +6,31 @@ public class ModesMenu : MonoBehaviour {
 
     public void PlayFrozen() {
         Game.LoadGame();
-        Game.setGameMode(GameMode.Frozen);
+        Game.SetGameMode(GameMode.Frozen);
     }
 
     public void PlayEasy() {
         Game.LoadGame();
-        Game.setGameMode(GameMode.Easy);
+        Game.SetGameMode(GameMode.Easy);
     }
 
     public void PlayHard() {
         Game.LoadGame();
-        Game.setGameMode(GameMode.Hard);
+        Game.SetGameMode(GameMode.Hard);
     }
 
     public void PlayCluster() {
         Game.LoadGame();
-        Game.setGameMode(GameMode.Cluster);
+        Game.SetGameMode(GameMode.Cluster);
     }
 
     public void PlayTwoHit() {
         Game.LoadGame();
-        Game.setGameMode(GameMode.TwoHit);
+        Game.SetGameMode(GameMode.TwoHit);
     }
 
     public void PlayTeleport() {
         Game.LoadGame();
-        Game.setGameMode(GameMode.Teleport);
+        Game.SetGameMode(GameMode.Teleport);
     }
 }

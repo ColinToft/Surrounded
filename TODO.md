@@ -1,8 +1,4 @@
-## Version 0.6 (In Progress)
-- Highscore screen
-- Teleport mode
-- Two-hit mode
-- Scaleable menu (text changes size to fit screen)
+## Version 0.7 (In Progress)
 
 ## Future Game Modes
 ### Levelled

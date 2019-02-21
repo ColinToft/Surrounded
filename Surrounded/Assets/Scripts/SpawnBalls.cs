@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -53,7 +53,7 @@ public class SpawnBalls : MonoBehaviour {
 			GameObject spawned = Instantiate(ball, randomPos, Quaternion.identity);
             float radians = Random.Range(-Mathf.PI, Mathf.PI);
             spawned.GetComponent<BallMovement>().direction = new Vector3(Mathf.Sin(radians), Mathf.Cos(radians));
-            if (Game.isMode(GameMode.TwoHit)) spawned.GetComponent<BallMovement>().lives = 2;
+            if (Game.IsMode(GameMode.TwoHit)) spawned.GetComponent<BallMovement>().lives = 2;
 
             // Calculate the time that the next ball will be spawned
             nextBallTime = GetNextBallTime();

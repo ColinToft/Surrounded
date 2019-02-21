@@ -11,6 +11,7 @@ public class SpriteColorChanger : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rend = GetComponent<SpriteRenderer>();
+        Update();
 	}
 	
 	// Update is called once per frame

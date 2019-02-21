@@ -1,11 +1,13 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour {
 
 	public float movementSpeed;
+    public KeepScore score;
     Transform trans;
     Camera cam;
 
@@ -15,7 +17,7 @@ public class PlayerMovement : MonoBehaviour {
 	}
 	
 	void FixedUpdate () {
-        if (Game.isMode(GameMode.Frozen)) return;
+        if (Game.IsMode(GameMode.Frozen)) return;
         
 		if (Input.GetAxis("Vertical") != 0f && Input.GetAxis("Horizontal") != 0f) {
 			trans.position += new Vector3(Input.GetAxis("Horizontal") * movementSpeed * Time.deltaTime * Mathf.Sqrt(0.5f), 0, 0);
@@ -47,8 +49,8 @@ public class PlayerMovement : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.tag.EndsWith("Ball")) {
-            FindObjectOfType<Text>().GetComponent<KeepScore>().Stop();
-            Game.Instance.CheckAndSetScore(FindObjectOfType<Text>().GetComponent<KeepScore>().score);
+            score.Stop();
+            Game.Instance.CheckAndSetScore(score.score);
             Game.LoadGameOver();
         }
     }

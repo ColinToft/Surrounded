@@ -38,7 +38,7 @@ public class BallMovementOld : MonoBehaviour
         float halfHeight = cam.orthographicSize; // half of world height (from center to top of screen)
         float halfWidth = halfHeight * ((float)Screen.width / (float)Screen.height); // half of world width (from center to left of screen)
 
-        if (Game.isMode(GameMode.Easy))
+        if (Game.IsMode(GameMode.Easy))
         {
             // instead of bouncing, balls go off the screen on easy mode, this is logic to destroy balls off the screen
             if (trans.position.x < -halfWidth - ballRadius || trans.position.x > halfWidth + ballRadius || trans.position.y < -halfHeight - ballRadius || trans.position.y > halfHeight + ballRadius) Destroy(gameObject);
@@ -79,7 +79,7 @@ public class BallMovementOld : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D coll)
     {
-        if ((coll.gameObject.CompareTag("Ball") || coll.gameObject.CompareTag("Mouse Ball")) && !Game.isMode(GameMode.Hard))
+        if ((coll.gameObject.CompareTag("Ball") || coll.gameObject.CompareTag("Mouse Ball")) && !Game.IsMode(GameMode.Hard))
         {
             Destroy(this.gameObject);
         }
