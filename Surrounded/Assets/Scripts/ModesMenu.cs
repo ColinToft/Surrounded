@@ -33,4 +33,9 @@ public class ModesMenu : MonoBehaviour {
         Game.LoadGame();
         Game.SetGameMode(GameMode.Teleport);
     }
+
+    public void PlayDodge() {
+        Game.LoadGame();
+        Game.SetGameMode(GameMode.Dodge);
+    }
 }

@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public enum GameMode
+﻿public enum GameMode
 { 
-    Classic, Frozen, Easy, Hard, Cluster, TwoHit, Teleport
+    Classic, Frozen, Easy, Hard, Cluster, TwoHit, Teleport, Dodge
 }
 
 static class GameModeMethods
@@ -27,6 +23,8 @@ static class GameModeMethods
                 return "TWO-HIT";
             case GameMode.Teleport:
                 return "TELEPORT";
+            case GameMode.Dodge:
+                return "DODGE";
             default:
                 return "?";
         }

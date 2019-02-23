@@ -23,7 +23,7 @@ public class BallShooter : MonoBehaviour {
 	}
 	
 	void Update () {
-        if (Input.GetButtonDown("Fire") && !Game.IsPaused()) {
+        if (Input.GetButtonDown("Fire") && !Game.IsPaused() && !Game.IsMode(GameMode.Dodge)) {
             Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 
             Vector2 difference = new Vector2(mousePos.x, mousePos.y) - new Vector2(trans.position.x, trans.position.y);
