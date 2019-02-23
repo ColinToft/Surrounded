@@ -101,6 +101,9 @@ public class BallMovement : MonoBehaviour {
             }
         }
 
+        Debug.Log("ball movement line 104");
+        Debug.Log(movementSpeed);
+        Debug.Log(rb.velocity.magnitude);
         if (rb.velocity.magnitude != movementSpeed && !clustered)
         {
             rb.velocity *= movementSpeed / rb.velocity.magnitude;

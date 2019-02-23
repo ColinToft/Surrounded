@@ -1121,6 +1121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c3b48537a0564513b028833d733bd50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colorOffset: 0
 --- !u!81 &1450743171
 AudioListener:
   m_ObjectHideFlags: 0
@@ -1346,7 +1347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 676423784cf684d6890f25e95365e259, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colourOffset: 3
+  colorOffset: 0
 --- !u!1 &1597598319
 GameObject:
   m_ObjectHideFlags: 0
@@ -2030,7 +2031,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 959c11b1d06d74226969a1e999cc9364, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colourOffset: 2
+  colorOffset: 2
 --- !u!114 &1991066959
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1001,6 +1001,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c3b48537a0564513b028833d733bd50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colorOffset: 0
 --- !u!82 &95768863
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1121,7 +1122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 676423784cf684d6890f25e95365e259, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colourOffset: 3
+  colorOffset: 0
 --- !u!1 &109090892
 GameObject:
   m_ObjectHideFlags: 0
@@ -9271,8 +9272,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12a14782ffa89458ba074199e1609904, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colorOffset: 0
   image: {fileID: 1566526791}
-  colourOffset: 3
 --- !u!1 &1574895565
 GameObject:
   m_ObjectHideFlags: 0

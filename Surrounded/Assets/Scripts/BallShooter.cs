@@ -31,13 +31,9 @@ public class BallShooter : MonoBehaviour {
             angle = Vector2.Angle(Vector2.up, difference) * sign * Mathf.Deg2Rad; // angle of ball to be shot in radians
             Vector3 direction = new Vector3(Mathf.Sin(angle), Mathf.Cos(angle));
 
-            Debug.Log("start");
             float adjustedAngle = Mathf.Abs(angle) % (90 * Mathf.Deg2Rad); // adjust because we only want a value between 0 and 45 degrees
-            Debug.Log(adjustedAngle);
             if (adjustedAngle > (45 * Mathf.Deg2Rad)) adjustedAngle = (90 * Mathf.Deg2Rad) - adjustedAngle;
-            Debug.Log(adjustedAngle);
             float distance = ballRadius + (playerRadius / Mathf.Cos(adjustedAngle)) + ballSpawnSpacing; // (ball radius) + (formula to calculate distance to edge of square) + (ballSpawnSpacing)
-            Debug.Log(distance);
 
             Vector3 ballPos = trans.position + (direction * distance);
             GameObject spawned = Instantiate(ball, ballPos, Quaternion.identity);

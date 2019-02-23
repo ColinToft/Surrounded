@@ -65,7 +65,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 959c11b1d06d74226969a1e999cc9364, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colourOffset: 4
+  colorOffset: 4
 --- !u!212 &212644333263734614
 SpriteRenderer:
   m_ObjectHideFlags: 0

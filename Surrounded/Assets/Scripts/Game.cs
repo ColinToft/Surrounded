@@ -14,10 +14,6 @@ public sealed class Game {
         get { return _instance.Value; }
     }
 
-    /// <summary> How long it takes for color changer scripts to go through the whole rainbow. </summary>
-    public static float ColourCycleTime = 60f;
-
-
     float[] highscores;
 
     public float musicVolume;
@@ -48,7 +44,7 @@ public sealed class Game {
 
     public static float GetHighScore()
     {
-        return Instance.highscores[(int)Instance.gameMode];
+        return GetHighScore(Instance.gameMode);
     }
 
     public static float GetHighScore(GameMode mode)
@@ -169,6 +165,17 @@ public sealed class Game {
         Game.SetQuality(Instance.quality);
         Game.SetResolution(Instance.resolution);
         Game.SetFullScreen(Instance.fullScreen);
+        QualitySettings.vSyncCount = 1;
+
+        // Add highscores for new game modes to the list
+        int numModes = System.Enum.GetNames(typeof(GameMode)).Length;
+        if (Instance.highscores.Length != numModes)
+        {
+            float[] oldHighscores = Instance.highscores;
+            Instance.highscores = new float[numModes];
+            Array.Copy(oldHighscores, Instance.highscores, oldHighscores.Length);
+        }
+
     }
 
     /// <summary>Set the most recent score of the game.
