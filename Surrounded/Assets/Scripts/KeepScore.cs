@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 
 public class KeepScore : MonoBehaviour {
@@ -13,13 +11,11 @@ public class KeepScore : MonoBehaviour {
     public float clusteredScoreForDistance = 10f; // Amount of points per second per one unit of distance when a ball is in a cluster (clustered game mode)
     bool counting;
 
-	// Use this for initialization
 	void Start () {
         score = 0;
         counting = true;
 	}
 	
-	// Update is called once per frame
 	void Update () {
         if (!counting) return;
         GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
@@ -27,5 +23,7 @@ public class KeepScore : MonoBehaviour {
         scoreText.text = score.ToString("0");
 	}
 
-    public void Stop() { counting = false; }
+    public void Stop() {
+        counting = false;
+    }
 }
