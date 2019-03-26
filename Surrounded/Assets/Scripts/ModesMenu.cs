@@ -1,41 +1,44 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ModesMenu : MonoBehaviour {
 
     public void PlayFrozen() {
-        Game.LoadGame();
         Game.SetGameMode(GameMode.Frozen);
+        Game.LoadGame();
     }
 
     public void PlayEasy() {
-        Game.LoadGame();
         Game.SetGameMode(GameMode.Easy);
+        Game.LoadGame();
     }
 
     public void PlayHard() {
-        Game.LoadGame();
         Game.SetGameMode(GameMode.Hard);
+        Game.LoadGame();
     }
 
     public void PlayCluster() {
-        Game.LoadGame();
         Game.SetGameMode(GameMode.Cluster);
+        Game.LoadGame();
     }
 
     public void PlayTwoHit() {
-        Game.LoadGame();
         Game.SetGameMode(GameMode.TwoHit);
+        Game.LoadGame();
     }
 
     public void PlayTeleport() {
-        Game.LoadGame();
         Game.SetGameMode(GameMode.Teleport);
+        Game.LoadGame();
     }
 
     public void PlayDodge() {
-        Game.LoadGame();
         Game.SetGameMode(GameMode.Dodge);
+        Game.LoadGame();
+    }
+
+    public void PlayInvisible() {
+        Game.SetGameMode(GameMode.Invisible);
+        Game.LoadGame();
     }
 }

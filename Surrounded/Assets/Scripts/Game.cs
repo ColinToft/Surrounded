@@ -165,7 +165,7 @@ public sealed class Game {
         Game.SetQuality(Instance.quality);
         Game.SetResolution(Instance.resolution);
         Game.SetFullScreen(Instance.fullScreen);
-        QualitySettings.vSyncCount = 1;
+        QualitySettings.vSyncCount = 0;
 
         // Add highscores for new game modes to the list
         int numModes = System.Enum.GetNames(typeof(GameMode)).Length;

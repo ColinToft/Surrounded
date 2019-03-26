@@ -1,13 +1,13 @@
 ﻿public enum GameMode
 { 
-    Classic, Frozen, Easy, Hard, Cluster, TwoHit, Teleport, Dodge
+    Classic, Frozen, Easy, Hard, Cluster, TwoHit, Teleport, Dodge, Invisible
 }
 
 static class GameModeMethods
 {
-    public static string GetName(this GameMode s1)
+    public static string GetName(this GameMode mode)
     {
-        switch (s1)
+        switch (mode)
         {
             case GameMode.Classic:
                 return "CLASSIC";
@@ -25,6 +25,8 @@ static class GameModeMethods
                 return "TELEPORT";
             case GameMode.Dodge:
                 return "DODGE";
+            case GameMode.Invisible:
+                return "INVISIBLE";
             default:
                 return "?";
         }

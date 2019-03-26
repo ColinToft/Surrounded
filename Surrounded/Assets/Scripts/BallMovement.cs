@@ -119,7 +119,7 @@ public class BallMovement : MonoBehaviour {
     /// </summary>
     public void Damage()
     {
-        if (--lives == 0) Destroy(this.gameObject);
+        if (--lives == 0) Destroy(gameObject);
         else GetComponent<SpriteRenderer>().sprite = cracked;
     }
 
