@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine.Profiling;
 using UnityEngine;
 
 public class CircleMask : MonoBehaviour
@@ -38,6 +37,7 @@ public class CircleMask : MonoBehaviour
 
     void CreateMask()
     {
+        Profiler.BeginSample("Create Mask");
         mask = new Texture2D(Screen.width * 2, Screen.height * 2);
 
         float oneWorldUnit = Vector2.Distance(Camera.main.WorldToScreenPoint(new Vector2(0, 0)), Camera.main.WorldToScreenPoint(new Vector2(1, 0)));
@@ -47,15 +47,18 @@ public class CircleMask : MonoBehaviour
         float centerX = mask.width * 0.5f;
         float centerY = mask.height * 0.5f;
 
+        // First, fill the texture with black
+        Color[] pixels = mask.GetPixels();
+        for (int i = 0; i < pixels.Length; i++) pixels[i] = Color.black;
+        mask.SetPixels(pixels);
 
-        for (int x = 0; x < mask.width; x++)
+        // Then, set pixels close enough to the center to clear
+        for (int x = (int)Mathf.Floor(centerX - screenVisibleDistance); x < centerX + screenVisibleDistance; x++)
         {
-            for (int y = 0; y < mask.height; y++)
+            for (int y = (int)Mathf.Floor(centerY - screenVisibleDistance); y < centerY + screenVisibleDistance; y++)
             {
                 if ((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY) <= distanceSquared) {
                     mask.SetPixel(x, y, Color.clear);
-                } else {
-                    mask.SetPixel(x, y, Color.black);
                 }
             }
         }
@@ -75,6 +78,8 @@ public class CircleMask : MonoBehaviour
 
         prevBottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0));
         prevTopRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
+
+        Profiler.EndSample();
     }
 
 }
