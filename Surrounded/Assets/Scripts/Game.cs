@@ -20,9 +20,11 @@ public sealed class Game {
 
     public int quality;
 
-    public int resolution;
+    public int screenWidth, screenHeight, refreshRate;
 
     public bool fullScreen;
+
+    public bool vSyncOn;
 
     [System.NonSerialized]
     public float score;
@@ -50,6 +52,32 @@ public sealed class Game {
     public static float GetHighScore(GameMode mode)
     {
         return Instance.highscores[(int)mode];
+    }
+
+    public static bool IsResolutionAvailable(int width, int height, int refreshRate)
+    {
+        Resolution r;
+        for (int i = 0; i < Screen.resolutions.Length; i++)
+        {
+            r = Screen.resolutions[i];
+            if (r.width == width && r.height == height && r.refreshRate == refreshRate) return true;
+        }
+
+        return false;
+    }
+
+    public static int GetResolutionIndex()
+    {
+        Resolution r;
+        for (int i = 0; i < Screen.resolutions.Length; i++)
+        {
+            r = Screen.resolutions[i];
+            if (r.width == Instance.screenWidth && r.height == Instance.screenHeight && r.refreshRate == Instance.refreshRate) return i;
+        }
+
+        Debug.Log("Unable to find previous resolution, setting to current resolution.");
+        Game.SetResolution(Screen.currentResolution);
+        return GetResolutionIndex(); 
     }
 
     public static bool IsMode(GameMode mode)
@@ -86,15 +114,33 @@ public sealed class Game {
 
     public static void SetResolution(int resolutionIndex)
     {
-        Instance.resolution = resolutionIndex;
         Resolution r = Screen.resolutions[resolutionIndex];
-        Screen.SetResolution(r.width, r.height, Screen.fullScreen);
+        Game.SetResolution(r);
+    }
+
+    public static void SetResolution(Resolution r)
+    {
+        Game.SetResolution(r.width, r.height, r.refreshRate);
+    }
+
+    public static void SetResolution(int width, int height, int refreshRate)
+    {
+        Instance.screenWidth = width;
+        Instance.screenHeight = height;
+        Instance.refreshRate = refreshRate;
+        Screen.SetResolution(width, height, Screen.fullScreen, refreshRate);
     }
 
     public static void SetFullScreen(bool isFullScreen)
     {
         Instance.fullScreen = isFullScreen;
         Screen.fullScreen = isFullScreen;
+    }
+
+    public static void SetVSync(bool vSyncOn)
+    {
+        Instance.vSyncOn = vSyncOn;
+        QualitySettings.vSyncCount = vSyncOn ? 1 : 0;
     }
 
     public static void LoadMainMenu()
@@ -131,14 +177,13 @@ public sealed class Game {
         highscores = new float[System.Enum.GetNames(typeof(GameMode)).Length];
         musicVolume = 0.7f;
 
-        for (int i = 0; i < Screen.resolutions.Length; i++)
-        {
-            if (Screen.resolutions[i].height == Screen.currentResolution.height && Screen.resolutions[i].width == Screen.currentResolution.width) resolution = i;
-        }
+        screenWidth = Screen.currentResolution.width;
+        screenHeight = Screen.currentResolution.height;
+        refreshRate = Screen.currentResolution.refreshRate;
 
-        SetQuality(QualitySettings.GetQualityLevel());
-        SetResolution(resolution);
-        SetFullScreen(Screen.fullScreen);
+        quality = QualitySettings.GetQualityLevel();
+        fullScreen = Screen.fullScreen;
+        vSyncOn = QualitySettings.vSyncCount == 0 ? false : true;
 
         newHighScore = false;
         _paused = false;
@@ -156,16 +201,24 @@ public sealed class Game {
         Instance._paused = b._paused;
 
         Game.SetQuality(b.quality);
-        Game.SetResolution(b.resolution);
+        Game.SetResolution(b.screenWidth, b.screenHeight, b.refreshRate);
         Game.SetFullScreen(b.fullScreen);
+        Game.SetVSync(b.vSyncOn);
     }
 
     public static void Start()
     {
         Game.SetQuality(Instance.quality);
-        Game.SetResolution(Instance.resolution);
+
+        Game.SetResolution(Instance.screenWidth, Instance.screenHeight, Instance.refreshRate); // If this is no longer available Unity automatically finds the best alternative (closest dimensions and highest refresh rate)
+
+        if (!Game.IsResolutionAvailable(Instance.screenWidth, Instance.screenHeight, Instance.refreshRate))
+        {
+            Game.SetResolution(Screen.currentResolution); // If our saved resolution is no longer available store the new resolution
+        }
+
         Game.SetFullScreen(Instance.fullScreen);
-        QualitySettings.vSyncCount = 0;
+        Game.SetVSync(Instance.vSyncOn);
 
         // Add highscores for new game modes to the list
         int numModes = System.Enum.GetNames(typeof(GameMode)).Length;

@@ -29,7 +29,7 @@ public static class SaveLoad {
             } catch (SerializationException)
             {
                 file.Close();
-                Debug.Log("Error loading data from file.");
+                Debug.Log("Error loading data from file. A new save file will be created.");
                 return false;
             }
             file.Close();

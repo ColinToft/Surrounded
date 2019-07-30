@@ -17,8 +17,7 @@ public class CircleMask : MonoBehaviour
 
     void Start()
     {
-        if (!Game.IsMode(GameMode.Invisible)) return;
-        CreateMask();
+        gameObject.SetActive(Game.IsMode(GameMode.Invisible));
         Update();
     }
 
@@ -50,7 +49,6 @@ public class CircleMask : MonoBehaviour
         // First, fill the texture with black
         Color[] pixels = mask.GetPixels();
         for (int i = 0; i < pixels.Length; i++) pixels[i] = Color.black;
-        mask.SetPixels(pixels);
 
         // Then, set pixels close enough to the center to clear
         for (int x = (int)Mathf.Floor(centerX - screenVisibleDistance); x < centerX + screenVisibleDistance; x++)
@@ -58,11 +56,12 @@ public class CircleMask : MonoBehaviour
             for (int y = (int)Mathf.Floor(centerY - screenVisibleDistance); y < centerY + screenVisibleDistance; y++)
             {
                 if ((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY) <= distanceSquared) {
-                    mask.SetPixel(x, y, Color.clear);
+                    pixels[y * mask.width + x] = Color.clear;
                 }
             }
         }
 
+        mask.SetPixels(pixels);
         mask.Apply();
         
         Vector3 cameraPos = Camera.main.transform.position;
