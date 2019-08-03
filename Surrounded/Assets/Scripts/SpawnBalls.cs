@@ -19,7 +19,7 @@ public class SpawnBalls : MonoBehaviour {
     float timeOffset; // Equal to Time.Time minus the time since the round was started
 
     /** The minimum distance spawned balls should be from the player. Min is sqrt(0.5) + 0.5 = 1.207, distance from center of circle to center of square, touching corners. */
-    public float minDistanceFromPlayer = 1.25f;
+    public float minDistanceFromPlayer = 1.5f;
 
     public float minDistanceFromBalls = 1.25f;
 
@@ -37,7 +37,7 @@ public class SpawnBalls : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
         // Spawn a ball if it is the right time
-        if (Time.time >= nextBallTime) {
+        if (Time.time >= nextBallTime && TutorialManager.ShouldSpawnBall()) {
             float ballRadius = ball.GetComponent<Transform>().localScale.x / 2; // Ball radius in world coords
             ballRadius = cam.WorldToScreenPoint(new Vector3(ballRadius, 0, 0)).x - cam.WorldToScreenPoint(new Vector3(0, 0, 0)).x; // Ball radius in screen coords
 

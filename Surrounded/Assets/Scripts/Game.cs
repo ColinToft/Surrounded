@@ -103,6 +103,8 @@ public sealed class Game {
     public static void FinishedTutorial()
     {
         Instance.completedTutorials[(int)Instance.gameMode] = true;
+        Instance.doingTutorial = false;
+        SaveLoad.Save();
     }
 
     public static bool IsPaused()

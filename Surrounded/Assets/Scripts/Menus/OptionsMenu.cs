@@ -60,11 +60,7 @@ public class OptionsMenu : MonoBehaviour {
         fullscreenToggle.isOn = Game.Instance.fullScreen;
         vSyncToggle.isOn = Game.Instance.vSyncOn;
     }
-
-    void Start() {
-
-    }
-
+    
     public void Reset() {
         Game.Reset();
         SaveLoad.Save();

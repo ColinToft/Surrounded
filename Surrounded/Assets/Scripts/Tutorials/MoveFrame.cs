@@ -13,4 +13,9 @@ public class MoveFrame : Frame
 
         return verticalDone && horizontalDone;
     }
+
+    public override bool ShouldSpawnBall()
+    {
+        return false;
+    }
 }

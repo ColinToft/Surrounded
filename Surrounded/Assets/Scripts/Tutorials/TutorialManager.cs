@@ -25,7 +25,6 @@ public class TutorialManager : MonoBehaviour
         for (int i = 0; i < frames.Count; i++)
         {
             if (frames[i].order == order) return frames[i];
-            else Debug.Log("Not the right order: " + frames[i].order.ToString());
         }
 
         Debug.Log("Unable to find frame, returning null.");
@@ -35,7 +34,6 @@ public class TutorialManager : MonoBehaviour
     public void SetFrame(int order)
     {
         currentFrame = GetFrameByOrder(order);
-        Debug.Log(currentFrame.message);
 
         try
         {
@@ -43,8 +41,6 @@ public class TutorialManager : MonoBehaviour
         } catch (NullReferenceException) {
             CompletedAllFrames();
         }
-
-        Debug.Log(messageText.text);
     }
 
     public void GoToNextFrame()
@@ -54,7 +50,7 @@ public class TutorialManager : MonoBehaviour
 
     public void CompletedAllFrames()
     {
-        messageText.SetText("Congratulations, you have completed the tutorial!");
+        messageText.SetText("Congratulations, you have completed the tutorial! Good luck, and try not to get Surrounded!");
         Game.FinishedTutorial();
     }
     
@@ -71,5 +67,20 @@ public class TutorialManager : MonoBehaviour
     {
         if (currentFrame && currentFrame.IsComplete()) GoToNextFrame();
         
+    }
+
+    /// <summary>
+    /// Makes sure that a ball should be spawned according to the current tutorial frame. If the tutorial is not in progress, this will always be true.
+    /// </summary>
+    public static bool ShouldSpawnBall()
+    {
+        if (!Game.IsDoingTutorial()) return true;
+        try
+        {
+            return GameObject.FindObjectOfType<TutorialManager>().currentFrame.ShouldSpawnBall();
+        } catch (NullReferenceException)
+        {
+            return true;
+        }
     }
 }

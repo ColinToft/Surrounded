@@ -11,4 +11,9 @@ public class DodgeFrame : Frame
     {
         return score.score > 5000f;
     }
+
+    public override bool ShouldSpawnBall()
+    {
+        return GameObject.FindGameObjectsWithTag("Ball").Length == 0;
+    }
 }
