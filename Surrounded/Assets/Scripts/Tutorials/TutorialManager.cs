@@ -6,71 +6,70 @@ using TMPro;
 public class TutorialManager : MonoBehaviour
 {
 
-    private static readonly Lazy<TutorialManager> _instance = new Lazy<TutorialManager>(InitializeTutorialManager);
+    private static TutorialManager _instance;
 
-    public static TutorialManager Instance
-    {
-        get { return _instance.Value; }
-    }
-
-    private static TutorialManager InitializeTutorialManager()
-    {
-        TutorialManager tm = GameObject.FindObjectOfType<TutorialManager>();
-        if (tm == null) Debug.Log("Unable to find TutorialManager");
-        else tm.SetTutorial(0);
-
-        return tm;
-    }
-
-    public List<Tutorial> tutorials = new List<Tutorial>();
+    public List<Frame> frames = new List<Frame>();
 
     public TMP_Text messageText;
+    public GameObject messagePanel;
 
-    private Tutorial currentTutorial;
+    private Frame currentFrame;
 
-    public static void AddTutorial(Tutorial tutorial)
+    public void AddFrame(Frame frame)
     {
-        Instance.tutorials.Add(tutorial);
+        if (!frames.Contains(frame)) frames.Add(frame);
     }
 
-    public Tutorial GetTutorialByOrder(int order)
+    public Frame GetFrameByOrder(int order)
     {
-        for (int i = 0; i < tutorials.Count; i++)
+        for (int i = 0; i < frames.Count; i++)
         {
-            if (tutorials[i].order == order) return tutorials[i];
+            if (frames[i].order == order) return frames[i];
+            else Debug.Log("Not the right order: " + frames[i].order.ToString());
         }
 
+        Debug.Log("Unable to find frame, returning null.");
         return null;
     }
 
-    public void SetTutorial(int order)
+    public void SetFrame(int order)
     {
-        currentTutorial = GetTutorialByOrder(order);
+        currentFrame = GetFrameByOrder(order);
+        Debug.Log(currentFrame.message);
 
-        if (!currentTutorial)
+        try
         {
-            CompletedAllTutorials();
-            return;
+            messageText.SetText(currentFrame.message);
+        } catch (NullReferenceException) {
+            CompletedAllFrames();
         }
 
-        messageText.text = currentTutorial.message;
+        Debug.Log(messageText.text);
     }
 
-    public void CompletedTutorial()
+    public void GoToNextFrame()
     {
-        SetTutorial(currentTutorial.order + 1);
+        SetFrame(currentFrame.order + 1);
     }
 
-    public void CompletedAllTutorials()
+    public void CompletedAllFrames()
     {
-        messageText.text = "Congratulations, you have completed the tutorial!";
+        messageText.SetText("Congratulations, you have completed the tutorial!");
+        Game.FinishedTutorial();
+    }
+    
+    public void Start()
+    {
+        if (Game.IsDoingTutorial())
+        {
+            SetFrame(1);
+            messagePanel.SetActive(true);
+        } 
     }
 
     public void Update()
     {
-        if (currentTutorial)
-        {
-            if (currentTutorial.IsComplete()) Instance.CompletedTutorial();
-        }
+        if (currentFrame && currentFrame.IsComplete()) GoToNextFrame();
+        
     }
 }

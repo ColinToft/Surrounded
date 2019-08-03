@@ -35,7 +35,7 @@ public class BallShooter : MonoBehaviour {
 
             Vector3 ballPos = trans.position + (direction * distance);
             GameObject spawned = Instantiate(ball, ballPos, Quaternion.identity);
-            spawned.GetComponent<BallMovement>().direction = direction;
+            spawned.GetComponent<BallMovement>().BeginMovement(direction);
             spawned.GetComponent<BallMovement>().tag = "Mouse Ball";
             
         }

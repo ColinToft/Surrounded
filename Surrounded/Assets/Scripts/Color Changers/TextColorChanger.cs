@@ -29,7 +29,7 @@ public class TextColorChanger : ColorChanger {
                 gradient = t.colorGradientPreset;
                 if (gradient != null) return true;
             }
-            catch (NullReferenceException e) {
+            catch (NullReferenceException) {
                 Debug.Log(t.text);
             }
         }

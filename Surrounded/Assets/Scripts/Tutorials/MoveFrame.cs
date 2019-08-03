@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveTutorial : Tutorial
+public class MoveFrame : Frame
 {
-
     private bool verticalDone = false, horizontalDone = false;
 
     public override bool IsComplete()

@@ -52,7 +52,8 @@ public class SpawnBalls : MonoBehaviour {
                 
 			GameObject spawned = Instantiate(ball, randomPos, Quaternion.identity);
             float radians = Random.Range(-Mathf.PI, Mathf.PI);
-            spawned.GetComponent<BallMovement>().direction = new Vector3(Mathf.Sin(radians), Mathf.Cos(radians));
+            Vector3 direction = new Vector3(Mathf.Sin(radians), Mathf.Cos(radians));
+            spawned.GetComponent<BallMovement>().BeginMovement(direction);
             if (Game.IsMode(GameMode.TwoHit)) spawned.GetComponent<BallMovement>().lives = 2;
 
             // Calculate the time that the next ball will be spawned

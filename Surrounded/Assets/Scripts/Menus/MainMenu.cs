@@ -10,12 +10,13 @@ public class MainMenu : MonoBehaviour {
         Game.Start();
     }
 
-    public void PlayClassic() {
-        Game.LoadGame();
-        Game.SetGameMode(GameMode.Classic);
+    public void PlayClassic()
+    {
+        Game.LoadGame(GameMode.Classic);
     }
 
-    public void SaveAndQuit() {
+    public void SaveAndQuit()
+    {
         SaveLoad.Save();
         Game.QuitGame();
     }

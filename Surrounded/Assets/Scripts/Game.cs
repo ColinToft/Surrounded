@@ -16,6 +16,8 @@ public sealed class Game {
 
     float[] highscores;
 
+    bool[] completedTutorials;
+
     public float musicVolume;
 
     public int quality;
@@ -34,6 +36,9 @@ public sealed class Game {
 
     [System.NonSerialized]
     public GameMode gameMode;
+
+    [System.NonSerialized]
+    public bool doingTutorial;
 
     [System.NonSerialized]
     private bool _paused;
@@ -85,9 +90,19 @@ public sealed class Game {
         return Instance.gameMode == mode;
     }
 
-    public static void SetGameMode(GameMode mode)
+    public static bool IsDoingTutorial()
     {
-        Instance.gameMode = mode;
+        return Instance.doingTutorial;
+    }
+
+    public static bool HasCompletedTutorial(GameMode mode)
+    {
+        return Instance.completedTutorials[(int)mode];
+    }
+
+    public static void FinishedTutorial()
+    {
+        Instance.completedTutorials[(int)Instance.gameMode] = true;
     }
 
     public static bool IsPaused()
@@ -148,6 +163,24 @@ public sealed class Game {
         SceneManager.LoadScene("MainMenu");
     }
 
+    public static void LoadGame(GameMode mode)
+    {
+        if (!Game.HasCompletedTutorial(GameMode.Classic))
+        {
+            // TODO: Ask if they would like to do the classic tutorial
+            Instance.gameMode = GameMode.Classic;
+            Instance.doingTutorial = true;
+        }
+        else
+        {
+            Instance.gameMode = mode;
+            if (!Game.HasCompletedTutorial(mode)) Instance.doingTutorial = true;
+            else Instance.doingTutorial = false;
+        }
+
+        SceneManager.LoadScene("Surrounded");
+    }
+
     public static void LoadGame()
     {
         SceneManager.LoadScene("Surrounded");
@@ -177,6 +210,8 @@ public sealed class Game {
         highscores = new float[System.Enum.GetNames(typeof(GameMode)).Length];
         musicVolume = 0.7f;
 
+        completedTutorials = new bool[System.Enum.GetNames(typeof(GameMode)).Length];
+
         screenWidth = Screen.currentResolution.width;
         screenHeight = Screen.currentResolution.height;
         refreshRate = Screen.currentResolution.refreshRate;
@@ -187,6 +222,7 @@ public sealed class Game {
 
         newHighScore = false;
         _paused = false;
+
     }
 
     /// <summary>
@@ -199,6 +235,7 @@ public sealed class Game {
         Instance.musicVolume = b.musicVolume;
         Instance.newHighScore = b.newHighScore;
         Instance._paused = b._paused;
+        Instance.completedTutorials = b.completedTutorials;
 
         Game.SetQuality(b.quality);
         Game.SetResolution(b.screenWidth, b.screenHeight, b.refreshRate);
@@ -220,13 +257,17 @@ public sealed class Game {
         Game.SetFullScreen(Instance.fullScreen);
         Game.SetVSync(Instance.vSyncOn);
 
-        // Add highscores for new game modes to the list
+        // Add highscores and tutorials for new game modes to the list
         int numModes = System.Enum.GetNames(typeof(GameMode)).Length;
         if (Instance.highscores.Length != numModes)
         {
             float[] oldHighscores = Instance.highscores;
             Instance.highscores = new float[numModes];
             Array.Copy(oldHighscores, Instance.highscores, oldHighscores.Length);
+
+            bool[] oldCompletedTutorials = Instance.completedTutorials;
+            Instance.completedTutorials = new bool[numModes];
+            Array.Copy(oldCompletedTutorials, Instance.completedTutorials, oldCompletedTutorials.Length);
         }
 
     }

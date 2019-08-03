@@ -31,9 +31,10 @@ public class CircleMask : MonoBehaviour
 
         GetComponent<Transform>().position = new Vector3(playerTrans.position.x, playerTrans.position.y, zPosition);
 
-        if (bottomLeft != prevBottomLeft || topRight != prevTopRight) CreateMask();
+        // if (bottomLeft != prevBottomLeft || topRight != prevTopRight) CreateMask();
     }
 
+    /*
     void CreateMask()
     {
         Profiler.BeginSample("Create Mask");
@@ -80,5 +81,5 @@ public class CircleMask : MonoBehaviour
 
         Profiler.EndSample();
     }
-
+    */
 }

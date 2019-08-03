@@ -9,8 +9,6 @@ public class BallMovement : MonoBehaviour {
 
     public float movementSpeed = 5f;
 
-    public Vector3 direction;
-
     Rigidbody2D rb;
 
     public List<GameObject> cluster;
@@ -34,8 +32,6 @@ public class BallMovement : MonoBehaviour {
 	void Start () {
 		trans = GetComponent<Transform>();
         cam = Camera.main;
-        rb = GetComponent<Rigidbody2D>();
-        rb.AddForce(direction * movementSpeed * 50f); // For some reason 50 is the number to make the magnitude same as movement speed
         if (Game.IsMode(GameMode.Cluster) && gameObject.CompareTag("Ball")) {
             cluster = new List<GameObject>();
             clustered = false;
@@ -44,6 +40,13 @@ public class BallMovement : MonoBehaviour {
         ballRadius = trans.localScale.x / 2; // Ball radius in world coords
         halfHeight = cam.orthographicSize; // half of world height (from center to top of screen)
         halfWidth = halfHeight * ((float)Screen.width / (float)Screen.height); // half of world width (from center to left of screen)
+    }
+
+    /** Sets the ball in motion. Should be called by SpawnBalls and BallShooter as soon as a new ball is instantiated. */
+    public void BeginMovement(Vector3 direction)
+    {
+        if (rb == null) rb = GetComponent<Rigidbody2D>();
+        rb.AddForce(direction * movementSpeed * 50f); // For some reason 50 is the number to make the magnitude same as movement speed
     }
 
     /// <summary>
