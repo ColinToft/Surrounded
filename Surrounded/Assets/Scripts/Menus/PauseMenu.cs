@@ -9,34 +9,32 @@ public class PauseMenu : MonoBehaviour {
 
     public KeepScore score;
 	
-	// Update is called once per frame
 	void Update() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            if (Game.IsPaused()) Resume();
+            if (Game.IsPaused() && pauseMenuUI.activeSelf) Resume();
             else Pause();
         }
 	}
 
     public void GoToMainMenu() {
         Game.Instance.CheckAndSetScore(score.score);
-        Game.SetPaused(false);
-        Time.timeScale = 1f;
+        Game.Unpause();
         SaveLoad.Save();
         Game.LoadMainMenu();
     }
 
     public void Resume() {
         Camera.main.GetComponent<GameAudio>().Resume();
-        Game.SetPaused(false);
+        if (TutorialManager.CanUnpauseGame()) Game.Unpause();
         pauseMenuUI.SetActive(false);
-        Time.timeScale = 1f;
+        TutorialManager.UnhidePopup();
     }
 
     public void Pause () {
         Camera.main.GetComponent<GameAudio>().Pause();
-        Game.SetPaused(true);
+        Game.Pause();
+        TutorialManager.HidePopup();
         pauseMenuUI.SetActive(true);
-        Time.timeScale = 0f;
     }
 
     public void SaveAndQuit() {

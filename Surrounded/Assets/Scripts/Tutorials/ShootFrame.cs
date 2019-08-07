@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class ShootFrame : Frame
 {
+    float shootTime = 0;
+
     public override bool IsComplete()
     {
-        return GameObject.FindGameObjectsWithTag("Mouse Ball").Length > 0;
+        if (GameObject.FindGameObjectsWithTag("Mouse Ball").Length > 0 && shootTime == 0) shootTime = Time.fixedTime;
+        return shootTime != 0 && Time.fixedTime - shootTime > 1f; // Wait a bit before moving to the next frame
     }
 }

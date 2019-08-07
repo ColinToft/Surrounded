@@ -9,7 +9,7 @@ public class DodgeFrame : Frame
 
     public override bool IsComplete()
     {
-        return score.score > 5000f;
+        return score.score >= 5000f;
     }
 
     public override bool ShouldSpawnBall()

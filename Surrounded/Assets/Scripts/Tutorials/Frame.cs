@@ -9,7 +9,7 @@ public abstract class Frame : MonoBehaviour
     [TextAreaAttribute(3, 10)]
     public string message;
 
-    protected virtual void Awake()
+    protected void Awake()
     {
         GameObject.FindObjectOfType<TutorialManager>().AddFrame(this);
     }
@@ -18,6 +18,8 @@ public abstract class Frame : MonoBehaviour
     {
         return true;
     }
+
+    public virtual void StartFrame() { }
 
     public abstract bool IsComplete();
 

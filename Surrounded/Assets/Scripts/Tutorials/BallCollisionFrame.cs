@@ -8,9 +8,9 @@ public class BallCollisionFrame : Frame
     int ballCount = 0;
     float startTime;
 
-    protected override void Awake()
+    public override void StartFrame()
     {
-        base.Awake();
+        base.StartFrame();
         startTime = Time.fixedTime;
     }
 
@@ -19,7 +19,6 @@ public class BallCollisionFrame : Frame
         // Count balls to determine if there are less than there were before (balls have collided)
         int newBallCount = GameObject.FindGameObjectsWithTag("Ball").Length;
         if (newBallCount > ballCount) ballCount = newBallCount;
-        Debug.Log("fgjfkgj" + (Time.fixedTime - startTime).ToString());
         return (newBallCount < ballCount) && (Time.fixedTime - startTime > 10f);
     }
 

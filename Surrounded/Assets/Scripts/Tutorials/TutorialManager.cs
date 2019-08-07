@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class TutorialManager : MonoBehaviour
@@ -10,10 +11,19 @@ public class TutorialManager : MonoBehaviour
 
     public List<Frame> frames = new List<Frame>();
 
-    public TMP_Text messageText;
-    public GameObject messagePanel;
+    public TMP_Text cornerText;
+    public GameObject cornerPanel;
+
+    public TMP_Text popupText;
+    public GameObject popupPanel;
+    public RectTransform popupButtonGroup;
+
+    enum PanelType { Corner, Popup, None };
+
+    public TutorialMode tutorialMode;
 
     private Frame currentFrame;
+    private PanelType currentPanel = PanelType.None;
 
     public void AddFrame(Frame frame)
     {
@@ -37,10 +47,21 @@ public class TutorialManager : MonoBehaviour
 
         try
         {
-            messageText.SetText(currentFrame.message);
+            if (tutorialMode != TutorialMode.Popups)
+            {
+                cornerText.SetText(currentFrame.message);
+            }
+            if (tutorialMode != TutorialMode.Corner) popupText.SetText(currentFrame.message);
+
+            currentFrame.StartFrame();
+
+            if (tutorialMode == TutorialMode.Corner) SetActivePanel(PanelType.Corner);
+            else SetActivePanel(PanelType.Popup);
+
         } catch (NullReferenceException) {
             CompletedAllFrames();
         }
+        
     }
 
     public void GoToNextFrame()
@@ -50,23 +71,62 @@ public class TutorialManager : MonoBehaviour
 
     public void CompletedAllFrames()
     {
-        messageText.SetText("Congratulations, you have completed the tutorial! Good luck, and try not to get Surrounded!");
-        Game.FinishedTutorial();
+        SetActivePanel(PanelType.None);
+    }
+
+    void SetActivePanel(PanelType type)
+    {
+        currentPanel = type;
+
+        switch (type)
+        {
+            case PanelType.Corner:
+                cornerPanel.SetActive(true);
+                popupPanel.SetActive(false);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(cornerPanel.GetComponent<RectTransform>());
+                Game.Unpause();
+                break;
+
+            case PanelType.Popup:
+                cornerPanel.SetActive(false);
+                popupPanel.SetActive(true);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(popupPanel.GetComponent<RectTransform>());
+                LayoutRebuilder.ForceRebuildLayoutImmediate(popupButtonGroup);
+                Game.Pause();
+                break;
+
+            case PanelType.None:
+                cornerPanel.SetActive(false);
+                popupPanel.SetActive(false);
+                Game.Unpause();
+                break;
+        }
     }
     
     public void Start()
     {
-        if (Game.IsDoingTutorial())
-        {
-            SetFrame(1);
-            messagePanel.SetActive(true);
-        } 
+        if (Game.IsDoingTutorial() && Game.IsMode(GameMode.Classic)) SetFrame(1);
     }
 
     public void Update()
     {
         if (currentFrame && currentFrame.IsComplete()) GoToNextFrame();
-        
+    }
+
+    public void SkipTutorial()
+    {
+        Game.FinishedTutorial();
+        currentFrame = null;
+        SetActivePanel(PanelType.None);
+    }
+
+    /// <summary>
+    /// Called when the user presses OK on a tutorial popup.
+    /// </summary>
+    public void PopupOK()
+    {
+        if (tutorialMode == TutorialMode.Both) SetActivePanel(PanelType.Corner);
+        if (tutorialMode == TutorialMode.Popups) SetActivePanel(PanelType.None);
     }
 
     /// <summary>
@@ -83,4 +143,22 @@ public class TutorialManager : MonoBehaviour
             return true;
         }
     }
+
+    public static bool CanUnpauseGame()
+    {
+        return GameObject.FindObjectOfType<TutorialManager>().currentPanel != PanelType.Popup;
+    }
+
+    public static void HidePopup()
+    {
+        GameObject.FindObjectOfType<TutorialManager>().popupPanel.SetActive(false);
+    }
+
+    public static void UnhidePopup()
+    {
+        TutorialManager tm = GameObject.FindObjectOfType<TutorialManager>();
+        if (tm.currentPanel == PanelType.Popup) tm.popupPanel.SetActive(true);
+    }
 }
+
+public enum TutorialMode { Popups, Corner, Both };

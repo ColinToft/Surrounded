@@ -112,9 +112,16 @@ public sealed class Game {
         return Instance._paused;
     }
 
-    public static void SetPaused(bool value)
+    public static void Pause()
     {
-        Instance._paused = value;
+        Time.timeScale = 0f;
+        Instance._paused = true;
+    }
+
+    public static void Unpause()
+    {
+        Time.timeScale = 1f;
+        Instance._paused = false;
     }
 
     public static void SetMusicVolume(float volume)
