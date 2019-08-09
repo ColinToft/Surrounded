@@ -1,3 +1,20 @@
+## 0.7.0 - 2019-08-09
+### Added
+- Dodge mode (player is unable to shoot balls)
+- Invisible mode (player can only see balls close to them)
+- Tutorials (separate tutorials for all game modes)
+- New display resolution settings: framerate and VSync
+
+### Changed
+- Dynamically create squares and circles instead of drawing from sprites to improve graphics quality
+- Manually calculate bouncing physics instead of relying on Unity’s built in physics, which was causing issues
+- High scores screen is now two columns to fit all game modes
+
+### Fixed
+- Issue where the game would crash loading save data from previous versions
+- Issue where slider wouldn’t go all the way to the sides of the bar
+- Issue where game crashes when creating save file for the first time
+
 ## 0.6.0 - 2019-02-20
 ### Added
 - Two-hit mode (balls take two-hits to be destroyed instead of one)
