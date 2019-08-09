@@ -1,18 +1,14 @@
-## Version 0.7 (In Progress)
+## Version 0.8: In Progress!
 
 ## Future Game Modes
+### Flicker
+- Balls flicker, alternating between visible and invisible
+
 ### Levelled
 - Levels last 30(?) seconds
 - Ball spawning rate increases with each level
 - When you die you lose 25,000(?) points but restart at the current level
 - When you die but don't have enough points to lose, the game is over
-
-### Dodge
-- The player cannot shoot, only move around to dodge balls
-
-### Invisible
-- The player can only see balls close to them
-- Screen is dark except for a visible circle around the player?
 
 ### Multiplayer
 - 2 players (possibly more)
@@ -25,4 +21,4 @@
 - Add additional characters that can be purchased with coins
 - Add a character select screen to choose between characters
 - Achievements (unlock characters or give coins on completion)
-- Tutorial/Instructions (for all game modes)
+- Online leaderboard to compare highscores with other players
