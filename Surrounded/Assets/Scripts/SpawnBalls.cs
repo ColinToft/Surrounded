@@ -16,10 +16,10 @@ public class SpawnBalls : MonoBehaviour {
     // Values used to calculate time until next ball will spawn, in the GetNextBallTime method.
     float a = 0.4406427f; float b = -0.3032243f; float c = 3.0f; // This means a spawn time of 3s at time 0.0, 2s at 15.0 and 0.5 at 120.0
 
-    float timeOffset; // Equal to Time.Time minus the time since the round was started
+    float startTime; // Equal to the time that the round was started
 
     /** The minimum distance spawned balls should be from the player. Min is sqrt(0.5) + 0.5 = 1.207, distance from center of circle to center of square, touching corners. */
-    public float minDistanceFromPlayer = 1.5f;
+    public float minDistanceFromPlayer = 1.75f;
 
     public float minDistanceFromBalls = 1.25f;
 
@@ -29,7 +29,7 @@ public class SpawnBalls : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        timeOffset = Time.time; // add Time.time for when the game restarts, so there aren't a whole bunch of balls
+        startTime = Time.time;
         nextBallTime = GetNextBallTime();
         cam = Camera.main;
 	}
@@ -63,12 +63,12 @@ public class SpawnBalls : MonoBehaviour {
 	}
 
     float GetNextBallTime() {
-        float function = Mathf.Pow(Time.time - timeOffset, a) * b + c;
+        float function = Mathf.Pow(Time.time - startTime, a) * b + c;
         if (atMaxSpawnRate || function < maxSpawnRate) {
             atMaxSpawnRate = true;
             return Time.time + maxSpawnRate;
         }
-        return Time.time + function; // subtract timeOffset to get time sinadd timeOffset again to return to the actual time
+        return Time.time + function;
     }
 
 }

@@ -19,11 +19,17 @@ public class BallCollisionFrame : Frame
         // Count balls to determine if there are less than there were before (balls have collided)
         int newBallCount = GameObject.FindGameObjectsWithTag("Ball").Length;
         if (newBallCount > ballCount) ballCount = newBallCount;
-        return (newBallCount < ballCount) && (Time.fixedTime - startTime > 10f);
+        TutorialManager tm = GameObject.FindObjectOfType<TutorialManager>();
+        return (newBallCount < ballCount) && (Time.fixedTime - startTime > 10f || tm.tutorialMode != TutorialMode.Corner);
     }
 
     public override bool ShouldSpawnBall()
     {
-        return ballCount < 2;
+        return ballCount < 2 + (int)((Time.fixedTime - startTime) / 5f);
+    }
+
+    public override bool ShouldShootBall()
+    {
+        return false;
     }
 }

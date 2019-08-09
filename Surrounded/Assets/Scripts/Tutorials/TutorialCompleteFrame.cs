@@ -17,7 +17,6 @@ public class TutorialCompleteFrame : Frame
     {
         TutorialManager tm = GameObject.FindObjectOfType<TutorialManager>();
 
-        Debug.Log(Time.fixedTime - startTime);
-        return Time.fixedTime - startTime > 15f;
+        return Time.fixedTime - startTime > 15f || tm.tutorialMode != TutorialMode.Corner;
     }
 }

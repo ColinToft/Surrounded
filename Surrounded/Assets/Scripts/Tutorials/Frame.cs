@@ -19,6 +19,11 @@ public abstract class Frame : MonoBehaviour
         return true;
     }
 
+    public virtual bool ShouldShootBall()
+    {
+        return true;
+    }
+
     public virtual void StartFrame() { }
 
     public abstract bool IsComplete();

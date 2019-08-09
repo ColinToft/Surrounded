@@ -13,8 +13,10 @@ public class GameAudio : MonoBehaviour {
     public AudioClip cluster;
     public AudioClip twohit;
     public AudioClip teleport;
-	
-	void Awake () {
+    public AudioClip dodge;
+    public AudioClip invisible;
+
+    void Awake () {
         audioSource = GetComponent<AudioSource>();
         switch (Game.Instance.gameMode) {
             case GameMode.Frozen:
@@ -34,6 +36,12 @@ public class GameAudio : MonoBehaviour {
                 break;
             case GameMode.Teleport:
                 audioSource.clip = teleport;
+                break;
+            case GameMode.Dodge:
+                audioSource.clip = dodge;
+                break;
+            case GameMode.Invisible:
+                audioSource.clip = invisible;
                 break;
             default:
                 audioSource.clip = classic;

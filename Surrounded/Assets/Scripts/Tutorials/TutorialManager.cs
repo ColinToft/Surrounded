@@ -16,7 +16,7 @@ public class TutorialManager : MonoBehaviour
 
     public TMP_Text popupText;
     public GameObject popupPanel;
-    public RectTransform popupButtonGroup;
+    public GameObject skipTutorialButton;
 
     enum PanelType { Corner, Popup, None };
 
@@ -25,12 +25,37 @@ public class TutorialManager : MonoBehaviour
     private Frame currentFrame;
     private PanelType currentPanel = PanelType.None;
 
+    private String GetTextForGameMode(GameMode mode)
+    {
+        switch (mode)
+        {
+            case GameMode.Frozen:
+                return "In Frozen mode, you are frozen in place and unable to move! Shoot oncoming balls to survive as long as possible!";
+            case GameMode.Cluster:
+                return "In Cluster mode, when balls collide they freeze in place to form a cluster, and give you less points than normal balls. When you hit one ball in a cluster, the entire cluster disappears.";
+            case GameMode.Easy:
+                return "In Easy mode, balls simply disappear off the edge of the screen instead of bouncing off the walls.";
+            case GameMode.Hard:
+                return "In Hard mode, balls do not disappear when they collide! Instead, they bounce off of each other, meaning you have to destroy all the balls yourself.";
+            case GameMode.TwoHit:
+                return "In Two-hit mode, balls need to be hit twice to disappear (balls that you shoot still only need one hit). A ball will appear cracked after it has been hit once.";
+            case GameMode.Teleport:
+                return "In Teleport mode, balls don't bounce off the walls. Instead, they will disappear off one side of the screen and reappear on the opposite side.";
+            case GameMode.Dodge:
+                return "In Dodge mode, you are unable to shoot! Dodge oncoming balls to last as long as you can.";
+            case GameMode.Invisible:
+                return "In Invisible mode, most of the screen is invisible, and you can only see balls that are close to you.";
+            default:
+                return "The tutorial for this game mode is coming soon!";
+        }
+    }
+
     public void AddFrame(Frame frame)
     {
         if (!frames.Contains(frame)) frames.Add(frame);
     }
 
-    public Frame GetFrameByOrder(int order)
+    private Frame GetFrameByOrder(int order)
     {
         for (int i = 0; i < frames.Count; i++)
         {
@@ -41,7 +66,7 @@ public class TutorialManager : MonoBehaviour
         return null;
     }
 
-    public void SetFrame(int order)
+    private void SetFrame(int order)
     {
         currentFrame = GetFrameByOrder(order);
 
@@ -58,23 +83,30 @@ public class TutorialManager : MonoBehaviour
             if (tutorialMode == TutorialMode.Corner) SetActivePanel(PanelType.Corner);
             else SetActivePanel(PanelType.Popup);
 
-        } catch (NullReferenceException) {
+        }
+        catch (NullReferenceException)
+        {
             CompletedAllFrames();
         }
-        
+
     }
 
-    public void GoToNextFrame()
+    private void GoToNextFrame()
     {
         SetFrame(currentFrame.order + 1);
     }
 
-    public void CompletedAllFrames()
+    private void CompletedAllFrames()
     {
         SetActivePanel(PanelType.None);
     }
 
-    void SetActivePanel(PanelType type)
+    private bool IsLastFrame()
+    {
+        return GetFrameByOrder(currentFrame.order + 1) == null;
+    }
+
+    private void SetActivePanel(PanelType type)
     {
         currentPanel = type;
 
@@ -90,8 +122,8 @@ public class TutorialManager : MonoBehaviour
             case PanelType.Popup:
                 cornerPanel.SetActive(false);
                 popupPanel.SetActive(true);
+                if (IsLastFrame()) skipTutorialButton.SetActive(false);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(popupPanel.GetComponent<RectTransform>());
-                LayoutRebuilder.ForceRebuildLayoutImmediate(popupButtonGroup);
                 Game.Pause();
                 break;
 
@@ -102,15 +134,28 @@ public class TutorialManager : MonoBehaviour
                 break;
         }
     }
-    
-    public void Start()
+
+    void Start()
     {
-        if (Game.IsDoingTutorial() && Game.IsMode(GameMode.Classic)) SetFrame(1);
+        if (Game.IsDoingTutorial())
+        {
+            if (Game.IsMode(GameMode.Classic)) SetFrame(1);
+            else ShowGameModePopup();
+        }
+
     }
 
-    public void Update()
+    void Update()
     {
-        if (currentFrame && currentFrame.IsComplete()) GoToNextFrame();
+        if (currentFrame && currentFrame.IsComplete() && !popupPanel.activeSelf) GoToNextFrame();
+    }
+
+    private void ShowGameModePopup()
+    {
+        popupText.SetText(GetTextForGameMode(Game.Instance.gameMode));
+        skipTutorialButton.SetActive(false);
+        Game.Pause();
+        SetActivePanel(PanelType.Popup);
     }
 
     public void SkipTutorial()
@@ -127,6 +172,13 @@ public class TutorialManager : MonoBehaviour
     {
         if (tutorialMode == TutorialMode.Both) SetActivePanel(PanelType.Corner);
         if (tutorialMode == TutorialMode.Popups) SetActivePanel(PanelType.None);
+
+        if (!Game.IsMode(GameMode.Classic))
+        {
+            CompletedAllFrames();
+            Game.FinishedTutorial();
+            Game.Unpause();
+        }
     }
 
     /// <summary>
@@ -138,7 +190,24 @@ public class TutorialManager : MonoBehaviour
         try
         {
             return GameObject.FindObjectOfType<TutorialManager>().currentFrame.ShouldSpawnBall();
-        } catch (NullReferenceException)
+        }
+        catch (NullReferenceException)
+        {
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// Makes sure that a ball should be shot according to the current tutorial frame. If the tutorial is not in progress, this will always be true.
+    /// </summary>
+    public static bool ShouldShootBall()
+    {
+        if (!Game.IsDoingTutorial()) return true;
+        try
+        {
+            return GameObject.FindObjectOfType<TutorialManager>().currentFrame.ShouldShootBall();
+        }
+        catch (NullReferenceException)
         {
             return true;
         }
@@ -160,5 +229,6 @@ public class TutorialManager : MonoBehaviour
         if (tm.currentPanel == PanelType.Popup) tm.popupPanel.SetActive(true);
     }
 }
+
 
 public enum TutorialMode { Popups, Corner, Both };

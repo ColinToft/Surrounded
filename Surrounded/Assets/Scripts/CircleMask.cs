@@ -1,5 +1,5 @@
-﻿using UnityEngine.Profiling;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Linq;
 
 public class CircleMask : MonoBehaviour
 {
@@ -15,9 +15,19 @@ public class CircleMask : MonoBehaviour
 
     readonly float visibleRadius = 3f;
 
+    private int TEXTURE_SCREEN_WIDTH = 1920;
+    
     void Start()
     {
         gameObject.SetActive(Game.IsMode(GameMode.Invisible));
+        Sprite circleSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
+
+        float oneWorldUnit = Vector2.Distance(Camera.main.WorldToScreenPoint(new Vector2(0, 0)), Camera.main.WorldToScreenPoint(new Vector2(1, 0)));
+
+        Sprite sprite = Sprite.Create(circleSprite.texture,
+              new Rect(0, 0, circleSprite.texture.width, circleSprite.texture.height),
+              new Vector2(0.5f, 0.5f), oneWorldUnit);
+
         Update();
     }
 
@@ -25,15 +35,14 @@ public class CircleMask : MonoBehaviour
     {
         if (!Game.IsMode(GameMode.Invisible)) return;
 
-        // Check for screen resizing
-        Vector3 bottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0));
-        Vector3 topRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
-
         GetComponent<Transform>().position = new Vector3(playerTrans.position.x, playerTrans.position.y, zPosition);
 
-        // if (bottomLeft != prevBottomLeft || topRight != prevTopRight) CreateMask();
+        // if (bottomLeft != prevBottomLeft || topRight != prevTopRight) CreateMask(bottomLeft, topRight);
+        // Check for screen resizing
+        // Vector3 bottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0));
+        // Vector3 topRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
     }
-
+    
     /*
     void CreateMask()
     {

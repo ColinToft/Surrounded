@@ -77,7 +77,7 @@ public class BallMovement : MonoBehaviour {
     {
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         if (gameObject.CompareTag("Ball")) {
-            if (coll.gameObject.CompareTag("Ball")) { // This is a all colliding with Ball
+            if (coll.gameObject.CompareTag("Ball")) { // This is a Ball colliding with Ball
                 if (Game.IsMode(GameMode.Cluster)) {
                     if (!clustered) {
                         rb.velocity = new Vector2(0f, 0f);
@@ -100,16 +100,26 @@ public class BallMovement : MonoBehaviour {
             if (coll.gameObject.tag.EndsWith("Ball"))
             {
                 Damage();
-                return;
             }
         }
 
-        Debug.Log("ball movement line 104");
-        Debug.Log(movementSpeed);
-        Debug.Log(rb.velocity.magnitude);
-        if (rb.velocity.magnitude != movementSpeed && !clustered)
+        if (rb.velocity.magnitude != movementSpeed && lives > 0 && !clustered)
         {
+            Debug.Log("ball movement line 108");
+            Debug.Log(movementSpeed);
+            Debug.Log(rb.velocity.magnitude + " after colliding with " + coll.gameObject.tag);
             rb.velocity *= movementSpeed / rb.velocity.magnitude;
+        }
+    }
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.name == "TopCollider" || collision.name == "BottomCollider")
+        {
+            rb.velocity = new Vector2(rb.velocity.x, -rb.velocity.y);
+        } else if (collision.name == "LeftCollider" || collision.name == "RightCollider")
+        {
+            rb.velocity = new Vector2(-rb.velocity.x, rb.velocity.y);
         }
     }
 

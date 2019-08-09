@@ -15,10 +15,15 @@ public class MoveFrame : Frame
 
         if (verticalDone && horizontalDone && completeTime == 0) completeTime = Time.fixedTime;
 
-        return verticalDone && horizontalDone && Time.fixedTime - completeTime > 1.5f; // Wait a bit before moving to the next frame
+        return verticalDone && horizontalDone && Time.fixedTime - completeTime > 0.7f; // Wait a bit before moving to the next frame
     }
 
     public override bool ShouldSpawnBall()
+    {
+        return false;
+    }
+
+    public override bool ShouldShootBall()
     {
         return false;
     }

@@ -20,7 +20,10 @@ public class TextColorChanger : ColorChanger {
         gradient.topLeft = gradient.topRight = color;
         gradient.bottomLeft = gradient.bottomRight = (gradient.topLeft * 0.5f);
         gradient.bottomLeft.a = gradient.bottomRight.a = 1f; // Alpha also gets changed, so fix it
-        foreach (TMP_Text t in FindObjectsOfType<TMP_Text>()) t.ForceMeshUpdate();
+        foreach (TMP_Text t in FindObjectsOfType<TMP_Text>())
+        {
+            if (t.colorGradientPreset == gradient) t.ForceMeshUpdate();
+        }
     }
 
     bool FindGradient() {

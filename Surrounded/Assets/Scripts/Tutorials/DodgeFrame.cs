@@ -16,4 +16,9 @@ public class DodgeFrame : Frame
     {
         return GameObject.FindGameObjectsWithTag("Ball").Length == 0;
     }
+
+    public override bool ShouldShootBall()
+    {
+        return false;
+    }
 }
